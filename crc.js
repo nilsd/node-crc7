@@ -15,3 +15,19 @@ exports.getCRC = (buffer) => {
     
     return crc;
 }
+
+exports.getCRCForString = (string) => {
+    const CRC7_POLY = 0x91;
+    let crc = 0
+
+	for (let i = 0, L = string.length; i < L; i++) {
+		crc ^= string.charCodeAt(i)
+
+		for (let j = 0; j < 8; j++) {
+			crc = (crc & 0x80) ? ((crc << 1) ^ (CRC7_POLY << (8 - 7))) : (crc << 1)
+		}
+	}
+	crc = (crc & 0xff) >> (8 - 7)
+
+	return crc
+}
